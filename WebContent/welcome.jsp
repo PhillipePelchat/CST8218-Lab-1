@@ -8,7 +8,7 @@
 <body>
     <h3>Login successful!!!</h3>
     <h4>
-        Hello,
+        Hello, there (Victor added this bit)
         <%=session.getAttribute("name")%></h4>
 </body>
 </html>
