@@ -7,12 +7,12 @@
 <title>Crew</title>
 </head>
 <body>
-	<%@ include file="/masterPage.jsp"%>
+	<%@ include file="/index.jsp"%>
 	<!-- Crew Info -->
 	<div class="container" id="content">
 	<div class="row">
 	<section class="col-sm-4">
-	<img src="images/haider.jpg" class="img-responsive center-block img-rounded"alt="Haider picture">
+	<img src="images/image.png" class="img-responsive center-block img-rounded"alt="Haider picture">
 	<h3>Haider Ali</h3>
 	<p> Generic Info</p>
 	</section>
@@ -22,7 +22,7 @@
 	<p> Generic Info</p>
 	</section>
 	<section class="col-sm-4">
-	<img src="images/victor.jpg" class="img-responsive center-block img-rounded"alt="Victor picture">
+	<img src="images/victor.png" class="img-responsive center-block img-rounded"alt="Victor picture">
 	<h3>Victor Fernandes</h3>
 	<p>Generic Info</p>
 	</section>
