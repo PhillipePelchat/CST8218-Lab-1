@@ -14,7 +14,7 @@ public class DatabaseDao {
 	
 	public DatabaseDao() {
 		try {
-			if (conn == null || conn.isValid(0)) {
+			if (conn == null || conn.isValid(0) || conn.isClosed()) {
 				Class.forName(driver).newInstance();
 				conn = DriverManager.getConnection(url + dbName, userName, password);
 			}
