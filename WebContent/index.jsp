@@ -19,14 +19,14 @@
 
 	//if the session language is FR switch to french, otherwise remains english as set above
 	if (session.getAttribute("language").toString().equals("FR")) {
-		lang = ResourceBundle.getBundle("indextText");
+		lang = ResourceBundle.getBundle("indextText_FR");
 	}
 
 	//if the user clicked change language, set to appropriate language
 	if (request.getParameter("language") != null) {
 		if (request.getParameter("language").equals("FR")) {
 
-			lang = ResourceBundle.getBundle("indextText");
+			lang = ResourceBundle.getBundle("indextText_FR");
 			session.setAttribute("language", "FR");
 		} else {
 			lang = ResourceBundle.getBundle("indextText");
