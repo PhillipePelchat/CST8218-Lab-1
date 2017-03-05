@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `mealreview`.`Review` (
   `ReviewBody` VARCHAR(45) NOT NULL,
   `idAccount` INT NOT NULL,
   `idRestaurant` INT NOT NULL,
+  `DateCreated` DATETIME NOT NULL,
   PRIMARY KEY (`idReview`),
   INDEX `idAuthor_idx` (`idAccount` ASC),
   INDEX `idRestaurant_idx` (`idRestaurant` ASC),
