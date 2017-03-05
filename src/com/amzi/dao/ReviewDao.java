@@ -12,6 +12,13 @@ public class ReviewDao {
 	private static DatabaseDao db;
 	private static Connection conn = null;
 
+	/**
+	 * Add a Review to the database table
+	 * @param body
+	 * @param userId
+	 * @param restaurantId
+	 * @return true if row was added, false if nothing changed.
+	 */
 	public static boolean postReview(String body, int userId, int restaurantId) {
 		conn = null;
 		PreparedStatement pst = null;
@@ -54,8 +61,10 @@ public class ReviewDao {
 		}
 		return rowCount > 0;
 	}
-	/*
+	/**
 	 * Fetch ONE Review model for rendering its own page
+	 * @param int reviewId
+	 * @return Review, null if no review with that ID exists 
 	 */
 	public static Review getReview(int reviewId) {
 		Review review = null;
@@ -108,8 +117,9 @@ public class ReviewDao {
 		return review;
 	}
 
-	/*
+	/**
 	 * Fetch ALL the reviews in the database
+	 * @return ResultSet, null if no rows found (shouldn't happen, otherwise something is very wrong)
 	 */
 	public static ResultSet getReviewResultSet() {
 		db = new DatabaseDao();
@@ -125,6 +135,43 @@ public class ReviewDao {
 
 		try {
 			ps = conn.prepareStatement(sql);
+			resultSet = ps.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			db.closeConnection();
+		}
+
+		return resultSet;
+	}
+	/**
+	 * Get Reviews from User based on ID
+	 * @return ResultSet, null if no rows found
+	 */
+	public static ResultSet getReviewResultSetByUser(int UserId) {
+		db = new DatabaseDao();
+		conn = db.getConnection();
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+
+		String sql = "SELECT idUser, idRestaurant, ReviewBody, DateCreated, Username FROM Review"
+				+ "INNER JOIN Account "
+				+ "ON Account.idAccount=idUser "
+				+ "WHERE idUser=? "
+				+ "AND DateCreated BETWEEN '1970-01-010 00:00:00' AND NOW() "
+				+ "ORDER BY DateCreated desc;";
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, UserId);
+			
 			resultSet = ps.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
