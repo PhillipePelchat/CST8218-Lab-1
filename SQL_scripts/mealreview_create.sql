@@ -46,11 +46,11 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `mealreview`.`Review` (
   `idReview` INT NOT NULL AUTO_INCREMENT,
   `ReviewBody` VARCHAR(45) NOT NULL,
-  `idAccount` INT NOT NULL,
+  `idUser` INT NOT NULL,
   `idRestaurant` INT NOT NULL,
   `DateCreated` DATETIME NOT NULL,
   PRIMARY KEY (`idReview`),
-  INDEX `idAuthor_idx` (`idAccount` ASC),
+  INDEX `idAuthor_idx` (`idUser` ASC),
   INDEX `idRestaurant_idx` (`idRestaurant` ASC),
   CONSTRAINT `idAuthor`
     FOREIGN KEY (`idAccount`)
