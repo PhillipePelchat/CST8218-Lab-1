@@ -26,16 +26,16 @@ public class LoginServlet extends HttpServlet{
         String p=request.getParameter("password"); 
         
         HttpSession session = request.getSession(false);
-        if(session!=null)
-        session.setAttribute("name", n);
 
         if(LoginDao.validate(n, p)){  
-            RequestDispatcher rd=request.getRequestDispatcher("welcome.jsp");  
+            if(session!=null)
+            session.setAttribute("name", n);
+            RequestDispatcher rd=request.getRequestDispatcher("index.jsp");  
             rd.forward(request,response);  
         }  
         else{  
             out.print("<p style=\"color:red\">Sorry username or password error</p>");  
-            RequestDispatcher rd=request.getRequestDispatcher("index.jsp");  
+            RequestDispatcher rd=request.getRequestDispatcher("login.jsp");  
             rd.include(request,response);  
         }  
 

@@ -25,14 +25,14 @@ public class RegisterServlet extends HttpServlet {
 
 		String username = request.getParameter("username");
 		String email = request.getParameter("email");
-		String pass = request.getParameter("userpass");
+		String pass = request.getParameter("password");
 
 		HttpSession session = request.getSession(false);
-		if (session != null)
-			session.setAttribute("name", username);
 
-		if (LoginDao.signUp(username, email,pass)) {
-			RequestDispatcher rd = request.getRequestDispatcher("welcome.jsp");
+		if (LoginDao.signUp(username, email, pass)) {
+			if (session != null)
+				session.setAttribute("name", username);
+			RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
 			rd.forward(request, response);
 		} else {
 			out.print("<br/><br/><br/><div class=\"alert alert-danger\"><strong>Sorry database connection error</strong></div>");

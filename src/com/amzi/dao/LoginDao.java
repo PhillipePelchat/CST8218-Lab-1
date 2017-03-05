@@ -63,7 +63,7 @@ public class LoginDao {
             
             // This checks if the client is attempting to sign up with a
  			// username or email already in use
- 			PreparedStatement usrCheck = conn.prepareStatement("SELECT id FROM Account WHERE Username=? OR email=?");
+ 			PreparedStatement usrCheck = conn.prepareStatement("SELECT idAccount FROM Account WHERE Username=? OR Email=?");
  			usrCheck.setString(1, username);
  			usrCheck.setString(2, email);
 
@@ -71,14 +71,12 @@ public class LoginDao {
  													// row count is 0 and
  													// function returns false
  			{
- 				pst = conn.prepareStatement("INSERT INTO Account (Username, AccountType, Email, Password)"
- 						+ "VALUES"
- 						+ "(?, 0, ?, SHA(?)"); 	// SHA() returns a string hash, mathematically one-way. There is no way
+ 				pst = conn.prepareStatement("INSERT INTO Account (Username, AccountType, Email, Password) VALUES (?, 0, ?, SHA(?))"); 	// SHA() returns a string hash, mathematically one-way. There is no way
  												// to know what the password is, because it is not stored in the SQL
  												// server in plain text
- 				pst.setString(0, username);
- 				pst.setString(1, email);
- 				pst.setString(2, password);
+ 				pst.setString(1, username);
+ 				pst.setString(2, email);
+ 				pst.setString(3, password);
  				
  				rowCount = pst.executeUpdate(); // Catch how many rows were changed from the INSERT statement (Should be 1)
  			}
@@ -99,46 +97,46 @@ public class LoginDao {
     	return (rowCount > 0);
     }
     
-    public static int emailValidation(String email){
-    	int user_id = 0;
-    	Connection conn = null;  
-        PreparedStatement pst = null;  
-        ResultSet rs = null;  
-
-    	
-        try {  
-        	db = new DatabaseDao();
-            conn = db.getConnection(); 
-  
-            pst = conn  
-                    .prepareStatement("select * from users where email=?");  
-            pst.setString(1, email);  
- 
-            rs = pst.executeQuery();  
-            if(rs.next()){
-           	 user_id = rs.getInt("id");
-            }  
-  
-        } catch (Exception e) {  
-            System.out.println(e);  
-        } finally {  
-            if (pst != null) {  
-                try {  
-                    pst.close();  
-                } catch (SQLException e) {  
-                    e.printStackTrace();  
-                }  
-            }  
-            if (rs != null) {  
-                try {  
-                    rs.close();  
-                } catch (SQLException e) {  
-                    e.printStackTrace();  
-                }  
-            } 
-            db.closeConnection();
-        }  
-  
-    	return user_id;
-    }
+//    public static int emailValidation(String email){
+//    	int user_id = 0;
+//    	Connection conn = null;  
+//        PreparedStatement pst = null;  
+//        ResultSet rs = null;  
+//
+//    	
+//        try {  
+//        	db = new DatabaseDao();
+//            conn = db.getConnection(); 
+//  
+//            pst = conn  
+//                    .prepareStatement("select * from users where email=?");  
+//            pst.setString(1, email);  
+// 
+//            rs = pst.executeQuery();  
+//            if(rs.next()){
+//           	 user_id = rs.getInt("id");
+//            }  
+//  
+//        } catch (Exception e) {  
+//            System.out.println(e);  
+//        } finally {  
+//            if (pst != null) {  
+//                try {  
+//                    pst.close();  
+//                } catch (SQLException e) {  
+//                    e.printStackTrace();  
+//                }  
+//            }  
+//            if (rs != null) {  
+//                try {  
+//                    rs.close();  
+//                } catch (SQLException e) {  
+//                    e.printStackTrace();  
+//                }  
+//            } 
+//            db.closeConnection();
+//        }  
+//  
+//    	return user_id;
+//    }
 }
