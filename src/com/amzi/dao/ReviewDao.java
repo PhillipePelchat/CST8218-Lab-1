@@ -165,7 +165,7 @@ public class ReviewDao {
 				+ "INNER JOIN Account "
 				+ "ON Account.idAccount=idUser "
 				+ "WHERE idUser=? "
-				+ "AND DateCreated BETWEEN '1970-01-010 00:00:00' AND NOW() "
+				+ "AND DateCreated BETWEEN '1970-01-00 00:00:00' AND NOW() "
 				+ "ORDER BY DateCreated desc;";
 		
 		try {
