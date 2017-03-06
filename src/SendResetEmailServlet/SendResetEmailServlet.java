@@ -14,10 +14,14 @@ import java.util.*;
 public class SendResetEmailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	// String d_email = "emailfortesting2016@gmail.com", d_password =
-	// "abcdeabcde", d_host = "smtp.gmail.com", d_port = "465",
-	// m_to = "haider.hotmail@gmail.com", m_subject = "Testing", m_text = "Hey,
-	// this is the testing email.";
+	 String d_email = "emailfortesting2016@gmail.com", 
+			d_password = "abcdeabcde",
+			d_host = "smtp.gmail.com",
+			d_port = "465",
+			
+			m_to = "haider.hotmail@gmail.com",
+			m_subject = "Testing",
+			m_text = "Hey, this is the testing email.";
 
 	String message_subject = "Reset Password";
 	String message_body = "Hello, this is an Administrator of Meal Review. Please click the following link to reset your password<br/>";

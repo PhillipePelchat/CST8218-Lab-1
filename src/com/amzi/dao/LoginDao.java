@@ -9,12 +9,18 @@ public class LoginDao {
 	
 	private static DatabaseDao db;
 	private static Connection conn = null;
-	
-    public static boolean validate(String name, String pass) {        
+	/**
+	 * Validates username and password and returns the user's ID
+	 * @param name
+	 * @param pass
+	 * @return int userId
+	 */
+    public static int validate(String name, String pass) {        
         boolean status = false;
         conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
+        int userId = 0;
 
         try {
             db = new DatabaseDao();
@@ -28,6 +34,10 @@ public class LoginDao {
             rs = pst.executeQuery();
             status = rs.next();
             System.out.println("Query returned: " + status);
+            
+            if (status) {
+            	userId = rs.getInt("idAccount");
+            }
 
         } catch (Exception e) {
             System.err.println(e);
@@ -49,7 +59,7 @@ public class LoginDao {
             db.closeConnection();
             
         }
-        return status;
+        return userId;
     }
     
     public static boolean signUp(String username, String email, String password){

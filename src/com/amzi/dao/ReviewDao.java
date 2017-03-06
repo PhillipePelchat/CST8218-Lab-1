@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.amzi.models.Review;
 
@@ -118,16 +119,18 @@ public class ReviewDao {
 	}
 
 	/**
-	 * Fetch ALL the reviews in the database
+	 * Fetch ALL the reviews in the database.
+	 * <br/>Columns: idUser, idRestaurant, ReviewBody, DateCreated, Username
 	 * @return ResultSet, null if no rows found (shouldn't happen, otherwise something is very wrong)
 	 */
-	public static ResultSet getReviewResultSet() {
+	public static ArrayList<Review> getReviewResultSet() {
 		db = new DatabaseDao();
 		conn = db.getConnection();
 		PreparedStatement ps = null;
 		ResultSet resultSet = null;
+		ArrayList<Review> result = new ArrayList<>();
 
-		String sql = "SELECT idUser, idRestaurant, ReviewBody, DateCreated, Username FROM Review"
+		String sql = "SELECT idUser, idRestaurant, ReviewBody, DateCreated, Username FROM Review "
 				+ "INNER JOIN Account "
 				+ "ON Account.idAccount=idUser "
 				+ "AND DateCreated BETWEEN '1970-01-010 00:00:00' AND NOW() "
@@ -136,6 +139,14 @@ public class ReviewDao {
 		try {
 			ps = conn.prepareStatement(sql);
 			resultSet = ps.executeQuery();
+			while (resultSet.next()){
+				Review review = new Review(resultSet.getString("ReviewBody"), 
+						resultSet.getString("DateCreated"), 
+						resultSet.getString("Username"),
+						resultSet.getInt("idUser"), 
+						resultSet.getInt("idRestaurant"));
+				result.add(review);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -146,22 +157,21 @@ public class ReviewDao {
 					e.printStackTrace();
 				}
 			}
-			db.closeConnection();
 		}
 
-		return resultSet;
+		return result;
 	}
 	/**
-	 * Get Reviews from User based on ID
+	 * Get Reviews from User based on ID. Columns: idUser, idRestaurant, ReviewBody, DateCreated, Username
 	 * @return ResultSet, null if no rows found
 	 */
-	public static ResultSet getReviewResultSetByUser(int UserId) {
+	public static ArrayList<Review> getReviewResultSetByUser(int UserId) {
 		db = new DatabaseDao();
 		conn = db.getConnection();
 		PreparedStatement ps = null;
 		ResultSet resultSet = null;
-
-		String sql = "SELECT idUser, idRestaurant, ReviewBody, DateCreated, Username FROM Review"
+		ArrayList<Review> result = new ArrayList<>();
+		String sql = "SELECT idUser, idRestaurant, ReviewBody, DateCreated, Username FROM Review "
 				+ "INNER JOIN Account "
 				+ "ON Account.idAccount=idUser "
 				+ "WHERE idUser=? "
@@ -173,6 +183,15 @@ public class ReviewDao {
 			ps.setInt(1, UserId);
 			
 			resultSet = ps.executeQuery();
+			
+			while (resultSet.next()){
+				Review review = new Review(resultSet.getString("ReviewBody"), 
+						resultSet.getString("DateCreated"), 
+						resultSet.getString("Username"),
+						resultSet.getInt("idUser"), 
+						resultSet.getInt("idRestaurant"));
+				result.add(review);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -183,9 +202,8 @@ public class ReviewDao {
 					e.printStackTrace();
 				}
 			}
-			db.closeConnection();
 		}
-
-		return resultSet;
+		
+		return result;
 	}
 }

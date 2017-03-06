@@ -8,6 +8,7 @@
 				<li><a href="login.jsp">Log In	</a>
 				<li><a href="setLangToEN.jsp">EN</a><li>|</li>
 				<li><a href="setLangToFR.jsp">FR</a>
+				<li><a href="logout">Logout</a></li>
 			</ul>
 		</div>
 	</nav>

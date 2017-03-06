@@ -1,47 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
-    version="2.5">
-    <servlet>
-        <servlet-name>login</servlet-name>
-        <servlet-class>com.amzi.servlets.LoginServlet</servlet-class>
-    </servlet>
-    <servlet>
-    	<servlet-name>passwordRecovery</servlet-name>
-    	<servlet-class>PasswordRecoveryServlet.PasswordRecoveryServlet</servlet-class>
-    </servlet>
-    <servlet>
-    	<servlet-name>sendResetEmail</servlet-name>
-    	<servlet-class>SendResetEmailServlet.SendResetEmailServlet</servlet-class>
-    </servlet>
-    <servlet>
-    	<servlet-name>sendEmail</servlet-name>
-    	<servlet-class>SendEmail.SendEmailServlet</servlet-class>
-    </servlet>
-    <servlet>
-    	<servlet-name>registerServlet</servlet-name>
-    	<servlet-class>com.amzi.servlets.RegisterServlet</servlet-class>
-    </servlet>
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
+	version="2.5">
+	<servlet>
+		<servlet-name>login</servlet-name>
+		<servlet-class>com.amzi.servlets.LoginServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>passwordRecovery</servlet-name>
+		<servlet-class>PasswordRecoveryServlet.PasswordRecoveryServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>sendResetEmail</servlet-name>
+		<servlet-class>SendResetEmailServlet.SendResetEmailServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>sendEmail</servlet-name>
+		<servlet-class>SendEmail.SendEmailServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>registerServlet</servlet-name>
+		<servlet-class>com.amzi.servlets.RegisterServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>logout</servlet-name>
+		<servlet-class>com.amzi.servlets.LogoutServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>logout</servlet-name>
+		<url-pattern>/logout</url-pattern>
+	</servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>login</servlet-name>
-        <url-pattern>/loginServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-    	<servlet-name>passwordRecovery</servlet-name>
-    	<url-pattern>/passwordRecovery</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-    	<servlet-name>sendResetEmail</servlet-name>
-    	<url-pattern>/sendResetEmail</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-	    <servlet-name>registerServlet</servlet-name>
-	    <url-pattern>/register</url-pattern>
-    </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>login</servlet-name>
+		<url-pattern>/loginServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>passwordRecovery</servlet-name>
+		<url-pattern>/passwordRecovery</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>sendResetEmail</servlet-name>
+		<url-pattern>/sendResetEmail</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>registerServlet</servlet-name>
+		<url-pattern>/register</url-pattern>
+	</servlet-mapping>
 
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
 </web-app>
