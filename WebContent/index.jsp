@@ -44,11 +44,11 @@
 </head>
 <body>
 	<div class="container row">
-		<h1 class="col s12 center">Meal Review</h1>
-		<div class="col s12">
-			<p>
+		<h1 class="center">Meal Review</h1>
+		<div class="section content col s12">
+			<%-- <p>
 				Language:
-				<%=session.getAttribute("language")%></p>
+				<%=session.getAttribute("language")%></p> --%>
 			<%
 				if (session.getAttribute("name") != null) {
 			%>
@@ -59,7 +59,7 @@
 		</div>
 
 		<!-- User's Posts -->
-		<div class="col s12">
+		<div class="col s12 content">
 			<%
 				if (session.getAttribute("userId") != null) {
 					int id = (int) session.getAttribute("userId");
@@ -67,10 +67,15 @@
 					ArrayList<Review> r = null;
 					r = ReviewDao.getReviewResultSetByUser(id);
 					if (r != null) {
-						for (Review review: r) {
+						%>
+						<h5>Here are your latest public reviews:</h5>
+						<%
+						for (Review review : r) {
 			%>
-			<div class="col s12">
-				<h5>Restaurant ID: <%=review.getRestaurantId()%></h5>
+			<div class="card col s12">
+				<h5>
+					Restaurant ID:
+					<%=review.getRestaurantId()%></h5>
 				<p><%=review.getBody()%></p>
 			</div>
 			<%
@@ -85,21 +90,23 @@
 				}
 			%>
 		</div>
-<hr>
-		<div class="col s12">
+		<div class="divider"></div>
+		<div class="card col s12">
 			<h1>Latest Reviews</h1>
 			<%
 				ArrayList<Review> rs2;
 				rs2 = ReviewDao.getReviewResultSet();
 				if (rs2 != null) {
-					for (Review r: rs2) {
+					for (Review r : rs2) {
 			%>
-			<h5>Restaurant ID: <%=r.getRestaurantId()%></h5>
-			<h3>
+			<h5>
+				Restaurant ID:
+				<%=r.getRestaurantId()%></h5>
+			<h6>
 				By:
 				<%=r.getAuthorName()%></h3>
 			<p><%=r.getBody()%></p>
-
+			<div class="divider"></div>
 			<%
 				}
 				} else {

@@ -74,11 +74,11 @@
 			</div>
 		</div>
 	</div>
-	<div class="section">
+	<div class="container section col s12">
 	<h3 class="center"><%=lang.getString("generic.aboutus")%></h3>
 		<p class="flow-text"><%=lang.getString("welcome_page.p.firstParagraph")%></p>
-<%-- 		<p class="flow-text"><%=lang.getString("welcome_page.p.secondParagraph")%></p>
- --%>		<p class="flow-text"><%=lang.getString("welcome_page.p.thirdParagraph")%></p>
+		<p class="flow-text"><%=lang.getString("welcome_page.p.secondParagraph")%></p>
+		<p class="flow-text"><%=lang.getString("welcome_page.p.thirdParagraph")%></p>
 	</div>
 
 </body>
