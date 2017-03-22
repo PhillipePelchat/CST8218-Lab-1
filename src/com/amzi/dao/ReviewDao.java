@@ -245,118 +245,134 @@ public class ReviewDao {
 	}
 
 	/**
-	 * Sends a vote update to the Vote table. If the voter already voted with that value, remove the vote from the table<br>If the value is the opposite, update the row instead
+	 * Sends a vote update to the Vote table. If the voter already voted with
+	 * that value, remove the vote from the table<br>
+	 * If the value is the opposite, update the row instead
+	 * 
 	 * @param value
 	 * @param accountId
 	 * @param restaurantId
 	 * @return How many rows were updated
 	 */
-	public static int doVote(int value, int accountId, int restaurantId){
+	public static int doVote(int value, int accountId, int restaurantId) {
 		db = new DatabaseDao();
 		conn = db.getConnection();
 		PreparedStatement ps = null;
 		ResultSet r = null;
-		
+
 		int rowCount = 0, voteValue = 0;
 		boolean delete = false;
-		
-		String sql = "INSERT INTO `mealreview`.`vote`"
-				+ "(VoteValue, idVoterAccount, idVotedRestaurant)"
+
+		String voteInsertsql = "INSERT INTO `mealreview`.`vote`" + "(VoteValue, idVoterAccount, idVotedRestaurant)"
 				+ "VALUES (?,?,?)";
-		
-		String voteCheck = "SELECT * FROM `mealreview`.`vote`"
+
+		String updateRowSql = "UPDATE `mealreview`.`vote`" + "SET `vote`.VoteValue=?"
 				+ "WHERE idVoterAccount=? AND idVotedRestaurant=?";
-		
+
+		String deleteRowSql = "DELETE FROM `mealreview`.`vote`" + "WHERE idVoterAccount=? AND idVotedRestaurant=?";
+
+		String voteCheckSql = "SELECT * FROM `mealreview`.`vote`" + "WHERE idVoterAccount=? AND idVotedRestaurant=?";
+
 		try {
-			
-			ps = conn.prepareStatement(voteCheck);
+
+			ps = conn.prepareStatement(voteCheckSql);
 			ps.setInt(1, accountId);
 			ps.setInt(2, restaurantId);
 			r = ps.executeQuery();
+
+			voteValue = value;
 			
 			if (r.next()) {// If the vote exists, check what to do
 				int curVote = r.getInt("VoteValue");
 				delete = (curVote > 0 && value > 0) || (curVote < 0 && value < 0);
+
+				ps.close(); // Cleanup
+
+				if (delete) { // Vote is the same, remove it
+					ps = conn.prepareStatement(deleteRowSql);
+					ps.setInt(1, accountId);
+					ps.setInt(2, restaurantId);
+					rowCount = ps.executeUpdate();
+				} else { // Vote is new value, update it
+					ps = conn.prepareStatement(updateRowSql);
+					ps.setInt(1, value);
+					ps.setInt(2, accountId);
+					ps.setInt(3, restaurantId);
+					rowCount = ps.executeUpdate();
+				}
+
 			}
-			voteValue = value;
-			ps.close(); // Cleanup
-			
-			if (delete) {
-				ps = conn.prepareStatement("DELETE FROM `mealreview`.`vote`"
-						+ "WHERE idVoterAccount=? AND idVotedRestaurant=?");
-				ps.setInt(1, accountId);
-				ps.setInt(2, restaurantId);
-				rowCount = ps.executeUpdate();
-			}
+
 			else {
 				// Set new vote
-				ps = conn.prepareStatement(sql);
+				ps.close();
 				
+				ps = conn.prepareStatement(voteInsertsql);
+
 				ps.setInt(1, voteValue);
 				ps.setInt(2, accountId);
 				ps.setInt(3, restaurantId);
-				
+
 				rowCount = ps.executeUpdate();
-				
+
 			}
-			
-		} catch (Exception e) {  
-            System.out.println(e);  
-        } finally {  
-            if (ps != null) {  
-                try {  
-                    ps.close();  
-                } catch (SQLException e) {  
-                    e.printStackTrace();  
-                }  
-            }  
-            if (r != null) {  
-                try {  
-                    r.close();  
-                } catch (SQLException e) {  
-                    e.printStackTrace();  
-                }  
-            } 
-            db.closeConnection();
-        } // end try/catch/finally 
+
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (r != null) {
+				try {
+					r.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			db.closeConnection();
+		} // end try/catch/finally
 		return rowCount;
 	}
-	
-	public static int hasVoted(int accountId, int restaurantId){
+
+	public static int hasVoted(int accountId, int restaurantId) {
 		db = new DatabaseDao();
 		conn = db.getConnection();
 		PreparedStatement ps = null;
 		ResultSet r = null;
 		int voteValue = 0;
-		
-		String sql = "SELECT * FROM `mealreview`.`vote`"
-				+ "WHERE idVoterAccount=? AND idVotedRestaurant=?";
+
+		String sql = "SELECT * FROM `mealreview`.`vote`" + "WHERE idVoterAccount=? AND idVotedRestaurant=?";
 		try {
 			ps = conn.prepareStatement(sql);
 			r = ps.executeQuery();
-			
-			if (r.next()){
+
+			if (r.next()) {
 				voteValue = r.getInt("VotedValue");
 			}
-		} catch (Exception e) {  
-            System.out.println(e);  
-        } finally {  
-            if (ps != null) {  
-                try {  
-                    ps.close();  
-                } catch (SQLException e) {  
-                    e.printStackTrace();  
-                }  
-            }  
-            if (r != null) {  
-                try {  
-                    r.close();  
-                } catch (SQLException e) {  
-                    e.printStackTrace();  
-                }  
-            } 
-            db.closeConnection();
-        } // end try/catch/finally 
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (r != null) {
+				try {
+					r.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			db.closeConnection();
+		} // end try/catch/finally
 		return voteValue;
 	}
 }
