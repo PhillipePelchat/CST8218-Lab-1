@@ -41,10 +41,44 @@
 	}
 %>
 <%@include file="shared/navbar.jsp"%>
-
-<title>Insert title here</title>
+<%
+	// Get state model
+	Restaurant r = (Restaurant) session.getAttribute("restaurant");
+%>
+<title>MealReview ::: <%=r.getName()%></title>
 </head>
 <body>
+	<!-- Review column goes here -->
+	<div class="col s7 content">
+		<div class="row">
+			<%
+				if (r.getReviews().isEmpty()) {
+			%>
+			<h2><%=lang.getString("restaurant.NoReview")%></h2>
+			<%
+				} else {
+					for (Review review : r.getReviews()) {
+			%>
+						<div class="card col s12">
+							<h5>
+								Review by
+								<%=review.getAuthorName()%>
+							</h5>
+							<p><%=review.getBody()%></p>
+						</div>
+			<%
+					}
+				}
+			%>
 
+		</div>
+	</div>
+	<!-- Restaurant contact info goes here -->
+	<div class="col s5 content">
+		<h2>Address</h2>
+		<h2>Phone number</h2>
+		<h2>Website</h2>
+		<h2>Rating</h2>
+	</div>
 </body>
 </html>

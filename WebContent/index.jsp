@@ -67,15 +67,17 @@
 					ArrayList<Review> r = null;
 					r = ReviewDao.getReviewResultSetByUser(id);
 					if (r != null) {
-						%>
-						<h5>Here are your latest public reviews:</h5>
-						<%
-						for (Review review : r) {
+			%>
+			<h5>Here are your latest public reviews:</h5>
+			<%
+				for (Review review : r) {
 			%>
 			<div class="card col s12">
 				<h5>
-					Restaurant ID:
-					<%=review.getRestaurantId()%></h5>
+					<a href="Restaurant.jsp?id=<%=review.getRestaurantId()%>">
+						Review by <%=review.getAuthorName()%>
+					</a>
+				</h5>
 				<p><%=review.getBody()%></p>
 			</div>
 			<%
@@ -83,7 +85,7 @@
 					} else {
 			%>
 			<!--  TODO: TRANSLATE THIS -->
-			<p class="" col s12>You have no Reviews in your account :(</p>
+			<p class="col s12">You have no Reviews in your account :(</p>
 
 			<%
 				}
@@ -105,18 +107,19 @@
 			<h6>
 				By:
 				<%=r.getAuthorName()%></h3>
-			<p><%=r.getBody()%></p>
-			<div class="divider"></div>
-			<%
-				}
-				} else {
-			%>
-			<!--  TODO: TRANSLATE THIS -->
-			<p class="" col s12>No Reviews here :(</p>
+				<p><%=r.getBody()%></p>
+				<div class="divider"></div>
+				<%
+					}
+					} else {
+				%>
+				<!--  TODO: TRANSLATE THIS -->
+				<p class="" col s12>No Reviews here :(</p>
 
-			<%
-				}
-			%>
+				<%
+					}
+				%>
+			
 		</div>
 	</div>
 </body>

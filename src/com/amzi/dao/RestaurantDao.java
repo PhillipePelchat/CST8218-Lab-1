@@ -26,13 +26,13 @@ public class RestaurantDao {
 		ResultSet rs, rs2 = null;
 		Restaurant r = null;
 
-		String sql =  "SELECT * FROM Restaurant WHERE idRestaurant=?"; // Query to find restaurant
-		String sql2 = "SELECT * FROM Vote WHERE idRestaurant=?"; //Query to fetch votes for restaurant
+		String fetchRestaurantSql =  "SELECT * FROM Restaurant WHERE idRestaurant=?"; // Query to find restaurant
+		String fetchVotesSql = "SELECT * FROM Vote WHERE idRestaurant=?"; //Query to fetch votes for restaurant
 		try {
 			db = new DatabaseDao();
 			conn = db.getConnection();
 
-			ps = conn.prepareStatement(sql);
+			ps = conn.prepareStatement(fetchRestaurantSql);
 			ps.setInt(1, restaurantId);
 			rs = ps.executeQuery();
 			
@@ -47,7 +47,7 @@ public class RestaurantDao {
 			// Set up vote and down vote counts
 			if (r != null){
 				ps.close();
-				ps = conn.prepareStatement(sql2);
+				ps = conn.prepareStatement(fetchVotesSql);
 				ps.setInt(1, restaurantId);
 				
 				rs2 = ps.executeQuery();
