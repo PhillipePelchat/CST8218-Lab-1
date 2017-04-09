@@ -47,7 +47,6 @@ public class RestaurantServlet extends HttpServlet {
 		
 		request.getSession().setAttribute("restaurant", r);
 		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
