@@ -263,15 +263,15 @@ public class ReviewDao {
 		int rowCount = 0, voteValue = 0;
 		boolean delete = false;
 
-		String voteInsertsql = "INSERT INTO `mealreview`.`vote`" + "(VoteValue, idVoterAccount, idVotedRestaurant)"
+		String voteInsertsql = "INSERT INTO `mealreview`.`Vote`" + "(VoteValue, idVoterAccount, idVotedRestaurant)"
 				+ "VALUES (?,?,?)";
 
-		String updateRowSql = "UPDATE `mealreview`.`vote`" + "SET `vote`.VoteValue=?"
+		String updateRowSql = "UPDATE `mealreview`.`Vote`" + "SET `Vote`.VoteValue=?"
 				+ "WHERE idVoterAccount=? AND idVotedRestaurant=?";
 
-		String deleteRowSql = "DELETE FROM `mealreview`.`vote`" + "WHERE idVoterAccount=? AND idVotedRestaurant=?";
+		String deleteRowSql = "DELETE FROM `mealreview`.`Vote`" + "WHERE idVoterAccount=? AND idVotedRestaurant=?";
 
-		String voteCheckSql = "SELECT * FROM `mealreview`.`vote`" + "WHERE idVoterAccount=? AND idVotedRestaurant=?";
+		String voteCheckSql = "SELECT * FROM `mealreview`.`Vote`" + "WHERE idVoterAccount=? AND idVotedRestaurant=?";
 
 		try {
 
