@@ -27,7 +27,7 @@ public class RestaurantDao {
 		Restaurant r = null;
 
 		String fetchRestaurantSql =  "SELECT * FROM Restaurant WHERE idRestaurant=?"; // Query to find restaurant
-		String fetchVotesSql = "SELECT * FROM Vote WHERE idRestaurant=?"; //Query to fetch votes for restaurant
+		String fetchVotesSql = "SELECT * FROM Vote WHERE idVotedRestaurant=?"; //Query to fetch votes for restaurant
 		try {
 			db = new DatabaseDao();
 			conn = db.getConnection();
@@ -61,7 +61,6 @@ public class RestaurantDao {
 				}
 				r.setUpVote(upVote);
 				r.setDownVote(downVote);
-				
 			}
 			
 		} catch (SQLException e) {

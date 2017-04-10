@@ -68,59 +68,63 @@
 					r = ReviewDao.getReviewResultSetByUser(id);
 					if (r != null) {
 			%>
-			<h5>Here are your latest public reviews:</h5>
+			<h5><%=lang.getString("generic.myreview")%></h5>
 			<%
 				for (Review review : r) {
 			%>
 			<div class="card col s12">
-				<h5>
-					<a href="Restaurant.jsp?id=<%=review.getRestaurantId()%>">
-						Review by <%=review.getAuthorName()%>
+				<div class="card-content">
+					<span class="card-title"> <a
+						href="Restaurant.jsp?id=<%=review.getRestaurantId()%>"> <%=lang.getString("restaurant.reviewby") + review.getAuthorName()%>
 					</a>
-				</h5>
-				<p><%=review.getBody()%></p>
+					</span>
+					<p><%=review.getBody()%></p>
+				</div>
 			</div>
 			<%
 				}
-					} else {
-			%>
-			<!--  TODO: TRANSLATE THIS -->
-			<p class="col s12">You have no Reviews in your account :(</p>
-
-			<%
-				}
+					}
 				}
 			%>
 		</div>
 		<div class="divider"></div>
-		<div class="card col s12">
-			<h1>Latest Reviews</h1>
-			<%
-				ArrayList<Review> rs2;
-				rs2 = ReviewDao.getReviewResultSet();
-				if (rs2 != null) {
-					for (Review r : rs2) {
-			%>
-			<h5>
-				Restaurant ID:
-				<%=r.getRestaurantId()%></h5>
-			<h6>
-				By:
-				<%=r.getAuthorName()%></h3>
-				<p><%=r.getBody()%></p>
-				<div class="divider"></div>
-				<%
-					}
-					} else {
-				%>
-				<!--  TODO: TRANSLATE THIS -->
-				<p class="" col s12>No Reviews here :(</p>
+		<h1>Latest Reviews</h1>
+		<%
+			ArrayList<Review> rs2;
+			rs2 = ReviewDao.getReviewResultSet();
+			if (rs2 != null) {
+				for (Review review : rs2) {
+		%>
 
-				<%
-					}
-				%>
-			
+		<div class="card col s12">
+			<div class="card-content">
+				<span class="card-title"> <a
+					href="Restaurant.jsp?id=<%=review.getRestaurantId()%>"> <%=lang.getString("restaurant.reviewby") + review.getAuthorName()%>
+				</a>
+				</span>
+				<p><%=review.getBody()%></p>
+			</div>
+			<%
+				if (session.getAttribute("userId") != null && (int) session.getAttribute("userLevel") > 0) {
+			%>
+			<div class="card-action center">
+				<a href="./DeleteReviewServlet?reviewId=<%=review.getReviewId()%>"><%=lang.getString("restaurant.delete")%></a>
+			</div>
+			<%
+				}
+			%>
 		</div>
+		<%
+			}
+			} else {
+		%>
+		<!--  TODO: TRANSLATE THIS -->
+		<p class="col s12">No Reviews here :(</p>
+
+		<%
+			}
+		%>
+
 	</div>
 </body>
 </html>

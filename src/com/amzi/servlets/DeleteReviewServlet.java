@@ -1,31 +1,25 @@
 package com.amzi.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.amzi.dao.RestaurantDao;
 import com.amzi.dao.ReviewDao;
-import com.amzi.models.Restaurant;
-import com.amzi.models.Review;
-import com.sun.net.httpserver.HttpContext;
 
 /**
- * Servlet implementation class RestaurantServlet
+ * Servlet implementation class DeleteReviewServlet
  */
-public class RestaurantServlet extends HttpServlet {
+public class DeleteReviewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RestaurantServlet() {
+    public DeleteReviewServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,20 +28,12 @@ public class RestaurantServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		int restaurantId = -1;
-		restaurantId = Integer.parseInt(request.getParameter("id"));
-		
-		Restaurant r = RestaurantDao.getRestaurant(restaurantId);
-		
-		// Do nothing if restaurant doesn't exist by given ID
-		if (r == null || restaurantId == -1){
-			RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-			rd.forward(request, response);
+		int reviewId = Integer.parseInt(request.getParameter("reviewId"));
+		if ((int) request.getSession().getAttribute("userLevel") > 0){
+			ReviewDao.deleteReview(reviewId);
 		}
-		
-		request.getSession().setAttribute("restaurant", r);
-		
+		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+		rd.include(request, response);
 	}
 
 	/**

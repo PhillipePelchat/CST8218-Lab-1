@@ -32,7 +32,7 @@ public class ReviewDao {
 			conn = db.getConnection();
 
 			// TODO: Post Review
-			String sql = "INSERT INTO `mealreview`.`Review` " + "(ReviewBody, idUser, idRestaurant, DateCreated) VALUES"
+			String sql = "INSERT INTO Review (ReviewBody, idUser, idRestaurant, DateCreated) VALUES"
 					+ "(?, ?, ?, NOW()); ";
 			pst = conn.prepareStatement(sql);
 			pst.setString(1, body);
@@ -65,6 +65,41 @@ public class ReviewDao {
 	}
 
 	/**
+	 * Delete review by Id
+	 * @param reviewId
+	 * @return The number of rows affected
+	 */
+	public static int deleteReview(int reviewId){
+		db = new DatabaseDao();
+		conn = db.getConnection();
+		PreparedStatement ps = null;
+		int rowCount = 0;
+		
+		String deleteRowSql = "DELETE FROM Review WHERE idReview=?";
+		
+		try {
+			ps = conn.prepareStatement(deleteRowSql);
+			ps.setInt(1, reviewId);
+
+			rowCount = ps.executeUpdate();
+			
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			db.closeConnection();
+		}
+		return rowCount;
+	}
+	
+	/**
 	 * Fetch ONE Review model for rendering its own page
 	 * 
 	 * @param int
@@ -79,7 +114,7 @@ public class ReviewDao {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
-		String sql = "SELECT idUser, idRestaurant, ReviewBody, DateCreated, Username FROM Review "
+		String sql = "SELECT idReview, idUser, idRestaurant, ReviewBody, DateCreated, Username FROM Review "
 				+ "INNER JOIN Account " + "ON Account.idAccount=idUser " + "WHERE Review.idReview=?;";
 
 		try {
@@ -93,8 +128,9 @@ public class ReviewDao {
 				String authorName = rs.getString("Username");
 				int restaurantId = rs.getInt("restaurantId");
 				int authorId = rs.getInt("idUser");
+				int idReview = rs.getInt("idReview");
 
-				review = new Review(body, dateCreated, authorName, restaurantId, authorId);
+				review = new Review(idReview, body, dateCreated, authorName, restaurantId, authorId);
 			}
 
 		} catch (SQLException e) {
@@ -134,7 +170,7 @@ public class ReviewDao {
 		ResultSet resultSet = null;
 		ArrayList<Review> result = new ArrayList<>();
 
-		String sql = "SELECT idUser, idRestaurant, ReviewBody, DateCreated, Username FROM Review "
+		String sql = "SELECT idReview, idUser, idRestaurant, ReviewBody, DateCreated, Username FROM Review "
 				+ "INNER JOIN Account " + "ON Account.idAccount=idUser "
 				+ "AND DateCreated BETWEEN '1970-01-010 00:00:00' AND NOW() " + "ORDER BY DateCreated desc;";
 
@@ -142,8 +178,8 @@ public class ReviewDao {
 			ps = conn.prepareStatement(sql);
 			resultSet = ps.executeQuery();
 			while (resultSet.next()) {
-				Review review = new Review(resultSet.getString("ReviewBody"), resultSet.getString("DateCreated"),
-						resultSet.getString("Username"), resultSet.getInt("idUser"), resultSet.getInt("idRestaurant"));
+				Review review = new Review(resultSet.getInt("idReview"), resultSet.getString("ReviewBody"), resultSet.getString("DateCreated"),
+						resultSet.getString("Username"), resultSet.getInt("idRestaurant"), resultSet.getInt("idUser"));
 				result.add(review);
 			}
 		} catch (SQLException e) {
@@ -173,7 +209,7 @@ public class ReviewDao {
 		PreparedStatement ps = null;
 		ResultSet resultSet = null;
 		ArrayList<Review> result = new ArrayList<>();
-		String sql = "SELECT idUser, idRestaurant, ReviewBody, DateCreated, Username FROM Review "
+		String sql = "SELECT idReview, idUser, idRestaurant, ReviewBody, DateCreated, Username FROM Review "
 				+ "INNER JOIN Account " + "ON Account.idAccount=idUser " + "WHERE idUser=? "
 				+ "AND DateCreated BETWEEN '1970-01-00 00:00:00' AND NOW() " + "ORDER BY DateCreated desc;";
 
@@ -184,8 +220,8 @@ public class ReviewDao {
 			resultSet = ps.executeQuery();
 
 			while (resultSet.next()) {
-				Review review = new Review(resultSet.getString("ReviewBody"), resultSet.getString("DateCreated"),
-						resultSet.getString("Username"), resultSet.getInt("idUser"), resultSet.getInt("idRestaurant"));
+				Review review = new Review(resultSet.getInt("idReview"), resultSet.getString("ReviewBody"), resultSet.getString("DateCreated"),
+						resultSet.getString("Username"), resultSet.getInt("idRestaurant"), resultSet.getInt("idUser"));
 				result.add(review);
 			}
 		} catch (SQLException e) {
@@ -216,7 +252,7 @@ public class ReviewDao {
 		ResultSet resultSet = null;
 		ArrayList<Review> reviewList = new ArrayList<>();
 
-		String sql = "SELECT idUser, idRestaurant, ReviewBody, DateCreated, Username FROM Review "
+		String sql = "SELECT idReview, idUser, idRestaurant, ReviewBody, DateCreated, Username FROM Review "
 				+ "INNER JOIN Account " + "ON Account.idAccount=idUser " + "WHERE idRestaurant=? "
 				+ "AND DateCreated BETWEEN '1970-01-00 00:00:00' AND NOW() " + "ORDER BY DateCreated desc;";
 
@@ -226,11 +262,11 @@ public class ReviewDao {
 
 			resultSet = ps.executeQuery();
 			while (resultSet.next()) {
-				Review review = new Review(resultSet.getString("ReviewBody"), resultSet.getString("DateCreated"),
-						resultSet.getString("Username"), resultSet.getInt("idUser"), resultSet.getInt("idRestaurant"));
+				Review review = new Review(resultSet.getInt("idReview"), resultSet.getString("ReviewBody"), resultSet.getString("DateCreated"),
+						resultSet.getString("Username"), resultSet.getInt("idRestaurant"), resultSet.getInt("idUser"));
 				reviewList.add(review);
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			if (ps != null) {
@@ -263,15 +299,14 @@ public class ReviewDao {
 		int rowCount = 0, voteValue = 0;
 		boolean delete = false;
 
-		String voteInsertsql = "INSERT INTO `mealreview`.`Vote`" + "(VoteValue, idVoterAccount, idVotedRestaurant)"
+		String voteInsertsql = "INSERT INTO Vote (VoteValue, idVoterAccount, idVotedRestaurant)"
 				+ "VALUES (?,?,?)";
 
-		String updateRowSql = "UPDATE `mealreview`.`Vote`" + "SET `Vote`.VoteValue=?"
-				+ "WHERE idVoterAccount=? AND idVotedRestaurant=?";
+		String updateRowSql = "UPDATE Vote SET VoteValue=? WHERE idVoterAccount=? AND idVotedRestaurant=?";
 
-		String deleteRowSql = "DELETE FROM `mealreview`.`Vote`" + "WHERE idVoterAccount=? AND idVotedRestaurant=?";
+		String deleteRowSql = "DELETE FROM Vote WHERE idVoterAccount=? AND idVotedRestaurant=?";
 
-		String voteCheckSql = "SELECT * FROM `mealreview`.`Vote`" + "WHERE idVoterAccount=? AND idVotedRestaurant=?";
+		String voteCheckSql = "SELECT * FROM Vote WHERE idVoterAccount=? AND idVotedRestaurant=?";
 
 		try {
 

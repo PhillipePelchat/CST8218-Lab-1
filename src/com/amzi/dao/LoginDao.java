@@ -149,4 +149,49 @@ public class LoginDao {
   
     	return user_id;
     }
+    
+    public static int getUserLevel(int id){
+    	boolean status = false;
+    	int level = 0;
+        conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        
+        try {
+            db = new DatabaseDao();
+            conn = db.getConnection();
+            
+            // Check password with SHA()
+            pst = conn.prepareStatement("SELECT AccountType FROM Account where idAccount=?");
+            pst.setInt(1, id);
+
+            rs = pst.executeQuery();
+            status = rs.next();
+            System.out.println("Query returned: " + status);
+            
+            if (status) {
+            	level = rs.getInt("AccountType");
+            }
+
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
+            if (pst != null) {
+                try {
+                    pst.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            db.closeConnection();   
+        }
+        return level;
+    }
 }

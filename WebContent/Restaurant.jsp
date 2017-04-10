@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@page
-	import="java.util.ResourceBundle, java.util.Locale, java.util.ArrayList, com.amzi.dao.ReviewDao, com.amzi.models.Review, com.amzi.models.Restaurant, java.sql.ResultSet"%>
+	import="java.util.ResourceBundle, java.util.Locale, java.util.ArrayList, com.amzi.dao.*, com.amzi.models.Review, com.amzi.models.Restaurant, java.sql.ResultSet"%>
 <html>
 <head>
 <link href="css/materialize.min.css" rel="stylesheet">
@@ -43,42 +43,108 @@
 <%@include file="shared/navbar.jsp"%>
 <%
 	// Get state model
-	Restaurant r = (Restaurant) session.getAttribute("restaurant");
+	int id = Integer.parseInt(request.getParameter("id"));
+	Restaurant r = RestaurantDao.getRestaurant(id);
+	if (r == null) {
+		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+		rd.forward(request, response);
+	}
+	ArrayList<Review> list = ReviewDao.getReviewResultSetByRestaurant(id);
 %>
 <title>MealReview ::: <%=r.getName()%></title>
 </head>
 <body>
-	<!-- Review column goes here -->
-	<div class="col s7 content">
+	<div>
+		<!-- Restaurant contact info goes here -->
 		<div class="row">
-			<%
-				if (r.getReviews().isEmpty()) {
-			%>
-			<h2><%=lang.getString("restaurant.NoReview")%></h2>
-			<%
-				} else {
-					for (Review review : r.getReviews()) {
-			%>
-						<div class="card col s12">
-							<h5>
-								Review by
-								<%=review.getAuthorName()%>
+			<div class="col s5 m5">
+				<div class="card col s12">
+					<div class="card-content">
+						<span class="card-title"><%=r.getName()%></span>
+						<h5><%=lang.getString("restaurant.address")%></h5>
+						<p><%=r.getAddress()%></p>
+						<h5><%=lang.getString("restaurant.phone")%></h5>
+						<p><%=r.getPhoneNum()%></p>
+						<h5><%=lang.getString("restaurant.website")%></h5>
+						<p>
+							<a href="http://<%=r.getWebsite()%>" target="_blank"><%=r.getWebsite()%></a>
+						</p>
+						<h5><%=lang.getString("restaurant.rating")%></h5>
+						<p><%=r.getUpVote()%>
+							<%=lang.getString("restaurant.upvote")%>
+						</p>
+						<p><%=r.getDownVote()%>
+							<%=lang.getString("restaurant.downvote")%>
+						</p>
+					</div>
+					<%
+						if (session.getAttribute("userId") != null) {
+					%>
+					<div class="card-action center">
+						<a href="./VotingServlet?restaurantId=<%=r.getId()%>&type=1"><%=lang.getString("restaurant.like")%></a>
+						<a href="./VotingServlet?restaurantId=<%=r.getId()%>&type=-1"><%=lang.getString("restaurant.dislike")%></a>
+					</div>
+					<%
+						}
+					%>
+				</div>
+				<%
+					if (session.getAttribute("userId") != null) {
+				%>
+				<form class="col s12" action="textReviewServlet" method="post">
+					<div class="row">
+						<div class="input-field col s12">
+							<input type="hidden" name="restaurantId" value="<%=r.getId()%>" />
+							<textarea
+								placeholder="<%=lang.getString("restaurant.reviewfield")%>"
+								name="body" id="textarea" class="materialize-textarea"
+								required="required"></textarea>
+							<button class="btn orange" type="submit"><%=lang.getString("restaurant.reviewsubmit")%></button>
+						</div>
+					</div>
+				</form>
+				<%
+					}
+				%>
+			</div>
+
+			<!-- Review column goes here -->
+			<div class="col s7 m7">
+				<%
+					if (list == null || list.isEmpty()) {
+				%>
+				<h2><%=lang.getString("restaurant.NoReview")%></h2>
+				<%
+					} else {
+						for (Review review : r.getReviews()) {
+				%>
+				<div class="row">
+					<div class="card col s12">
+						<div class="card-content">
+							<span class="card-title"> <%=lang.getString("restaurant.reviewby") + " " + review.getAuthorName()%>
+							</span>
 							</h5>
 							<p><%=review.getBody()%></p>
 						</div>
-			<%
+						<%
+							if ((session.getAttribute("userId") != null && (int) session.getAttribute("userLevel") > 0)) {
+						%>
+						<div class="card-action center">
+							<a
+								href="./DeleteReviewServlet?reviewId=<%=review.getReviewId()%>"><%=lang.getString("restaurant.delete")%></a>
+						</div>
+						<%
+							}
+						%>
+					</div>
+				</div>
+				<%
 					}
-				}
-			%>
+					}
+				%>
 
+			</div>
 		</div>
-	</div>
-	<!-- Restaurant contact info goes here -->
-	<div class="col s5 content">
-		<h2>Address</h2>
-		<h2>Phone number</h2>
-		<h2>Website</h2>
-		<h2>Rating</h2>
 	</div>
 </body>
 </html>

@@ -2,14 +2,15 @@ package com.amzi.models;
 
 public class Review {
 	private String body, dateCreated, authorUsername;
-	private int restaurantId, authorId;
+	private int reviewId, restaurantId, authorId;
 
 	public String getBody() {
 		return body;
 	}
 
-	public Review(String body, String dateCreated, String authorName, int restaurantId, int authorId) {
+	public Review(int reviewId, String body, String dateCreated, String authorName, int restaurantId, int authorId) {
 		super();
+		this.reviewId = reviewId;
 		this.body = body;
 		this.dateCreated = dateCreated;
 		this.authorUsername = authorName;
@@ -51,6 +52,10 @@ public class Review {
 
 	public void setAuthorId(int authorId) {
 		this.authorId = authorId;
+	}
+	
+	public int getReviewId() {
+		return reviewId;
 	}
 
 }

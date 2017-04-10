@@ -32,10 +32,12 @@ public class LoginServlet extends HttpServlet {
 			if (session != null)
 				session.setAttribute("name", n);
 			session.setAttribute("userId", userId);
+			session.setAttribute("userLevel", LoginDao.getUserLevel(userId));
 			RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
 			rd.forward(request, response);
 		} else {
 			out.print("<p style=\"color:red\">Sorry username or password error</p>");
+			session.setAttribute("userLevel", 0);
 			RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
 			rd.include(request, response);
 		}

@@ -10,6 +10,7 @@ public class Restaurant {
 
 	public Restaurant(int id, String name, String address, String phoneNum, String website, ArrayList<Review> reviews) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.address = address;
 		this.phoneNum = phoneNum;

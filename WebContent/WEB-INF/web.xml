@@ -57,4 +57,34 @@
     <servlet-name>RestaurantServlet</servlet-name>
     <url-pattern>/RestaurantServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>VotingServlet</display-name>
+    <servlet-name>VotingServlet</servlet-name>
+    <servlet-class>com.amzi.servlets.VotingServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VotingServlet</servlet-name>
+    <url-pattern>/VotingServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>textReviewServlet</display-name>
+    <servlet-name>textReviewServlet</servlet-name>
+    <servlet-class>com.amzi.servlets.textReviewServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>textReviewServlet</servlet-name>
+    <url-pattern>/textReviewServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeleteReviewServlet</display-name>
+    <servlet-name>DeleteReviewServlet</servlet-name>
+    <servlet-class>com.amzi.servlets.DeleteReviewServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteReviewServlet</servlet-name>
+    <url-pattern>/DeleteReviewServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -52,7 +52,6 @@ main {
 	<!-- Padding to push the form down -->
 	<div class="section"></div>
 	<div class="section">
-		<main>
 		<center>
 			<h5><%=lang.getString("login_page.h2.loginM") %></h5>
 			<div class="section"></div>
